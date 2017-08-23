@@ -16,45 +16,50 @@
    <body>
     <p>{{word}}</p>
     <p>{{lives}}</p>
+    <p>{{#playerData.visibleWord}}  {{.}}  {{/playerData.visibleWord}}</p>
+    <p>{{#playerData.wordArray}}  {{.}}  {{/playerData.wordArray}}</p>
+    <p>{{#playerData.guesses}}  {{.}}  {{/playerData.guesses}}</p>
 
     <form action="/new" method="post">
       <button type="submit" name="letter" value="reset">New Word</button>
     </form>
 
+    {{#playerData}}
     <form action="/guess" method="post">
     <ul id="topRow">
-      <li><button type="submit" name="letter" value="Q">Q</button></li>
-      <li><button type="submit" name="letter" value="W">W</button></li>
-      <li><button type="submit" name="letter" value="E">E</button></li>
-      <li><button type="submit" name="letter" value="R">R</button></li>
-      <li><button type="submit" name="letter" value="T">T</button></li>
-      <li><button type="submit" name="letter" value="Y">Y</button></li>
-      <li><button type="submit" name="letter" value="U">U</button></li>
-      <li><button type="submit" name="letter" value="I">I</button></li>
-      <li><button type="submit" name="letter" value="O">O</button></li>
-      <li><button type="submit" name="letter" value="P">P</button></li>
+      <li><button type="submit" name="letter" value="q">q</button></li>
+      <li><button type="submit" name="letter" value="w">w</button></li>
+      <li><button type="submit" name="letter" value="e">e</button></li>
+      <li><button type="submit" name="letter" value="r">r</button></li>
+      <li><button type="submit" name="letter" value="t">t</button></li>
+      <li><button type="submit" name="letter" value="y">y</button></li>
+      <li><button type="submit" name="letter" value="u">u</button></li>
+      <li><button type="submit" name="letter" value="i">i</button></li>
+      <li><button type="submit" name="letter" value="o">o</button></li>
+      <li><button type="submit" name="letter" value="p">p</button></li>
     </ul>
     <ul id="midRow">
-      <li><button type="submit" name="letter" value="A">A</button></li>
-      <li><button type="submit" name="letter" value="S">S</button></li>
-      <li><button type="submit" name="letter" value="D">D</button></li>
-      <li><button type="submit" name="letter" value="F">F</button></li>
-      <li><button type="submit" name="letter" value="G">G</button></li>
-      <li><button type="submit" name="letter" value="H">H</button></li>
-      <li><button type="submit" name="letter" value="J">J</button></li>
-      <li><button type="submit" name="letter" value="K">K</button></li>
-      <li><button type="submit" name="letter" value="L">L</button></li>
+      <li><button type="submit" name="letter" value="a">a</button></li>
+      <li><button type="submit" name="letter" value="s">s</button></li>
+      <li><button type="submit" name="letter" value="d">d</button></li>
+      <li><button type="submit" name="letter" value="f">f</button></li>
+      <li><button type="submit" name="letter" value="g">g</button></li>
+      <li><button type="submit" name="letter" value="h">h</button></li>
+      <li><button type="submit" name="letter" value="j">j</button></li>
+      <li><button type="submit" name="letter" value="k">k</button></li>
+      <li><button type="submit" name="letter" value="l">l</button></li>
     </ul>
     <ul id="bottomRow">
-      <li><button type="submit" name="letter" value="Z">Z</button></li>
-      <li><button type="submit" name="letter" value="X">X</button></li>
-      <li><button type="submit" name="letter" value="C">C</button></li>
-      <li><button type="submit" name="letter" value="V">V</button></li>
-      <li><button type="submit" name="letter" value="B">B</button></li>
-      <li><button type="submit" name="letter" value="N">N</button></li>
-      <li><button type="submit" name="letter" value="M">M</button></li>
+      <li><button type="submit" name="letter" value="z">z</button></li>
+      <li><button type="submit" name="letter" value="x">x</button></li>
+      <li><button type="submit" name="letter" value="c">c</button></li>
+      <li><button type="submit" name="letter" value="v">v</button></li>
+      <li><button type="submit" name="letter" value="b">b</button></li>
+      <li><button type="submit" name="letter" value="n">n</button></li>
+      <li><button type="submit" name="letter" value="m">m</button></li>
     </ul>
   </form>
+  {{/playerData}}
 
    <script type="text/javascript" src="main.js"></script>
    </body>
