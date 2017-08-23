@@ -16,6 +16,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 
+app.set('trust proxy', 1)
+app.use(session({secret:'so-many-secrets',cookie:{maxAge:3600000,httpOnly:false}}));
+
 app.engine('mustache', mustache());
 app.set('views', './views')
 app.set('view engine', 'mustache')
@@ -33,10 +36,18 @@ app.get('/', function (req, res) {
   res.render('index',{word:word,lives:lives})
 })
 
+app.get('/guess', function (req, res) {
+  res.redirect("/");
+})
+
 app.post('/new', function(req,res) {
   word = getNewWord();
   lives = 8;
   res.redirect('/');
+})
+
+app.post('/guess',function(req,res){
+  console.log(req.body.letter);
 })
 
 app.listen(port, function () {

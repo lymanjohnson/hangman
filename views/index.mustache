@@ -4,12 +4,12 @@
      <meta charset="utf-8">
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
      <title></title>
-     <meta name="description" content="" />
-     <meta name="author" content="Lyman Johnson" />
-     <meta name="HandheldFriendly" content="true" />
-     <meta name="MobileOptimized" content="320" />
+     <meta name="letter" value="description" content="" />
+     <meta name="letter" value="author" content="Lyman Johnson" />
+     <meta name="letter" value="HandheldFriendly" content="true" />
+     <meta name="letter" value="MobileOptimized" content="320" />
      <!-- Use maximum-scale and user-scalable at your own risk. It disables pinch/zoom. Think about usability/accessibility before including.-->
-     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" /> -->
+     <!-- <meta name="letter" value="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" /> -->
      <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
      <link rel="stylesheet" type="text/css" href="style.css">
    </head>
@@ -18,8 +18,43 @@
     <p>{{lives}}</p>
 
     <form action="/new" method="post">
-      <button type="submit" name="reset">New Word</button>
+      <button type="submit" name="letter" value="reset">New Word</button>
     </form>
+
+    <form action="/guess" method="post">
+    <ul id="topRow">
+      <li><button type="submit" name="letter" value="Q">Q</button></li>
+      <li><button type="submit" name="letter" value="W">W</button></li>
+      <li><button type="submit" name="letter" value="E">E</button></li>
+      <li><button type="submit" name="letter" value="R">R</button></li>
+      <li><button type="submit" name="letter" value="T">T</button></li>
+      <li><button type="submit" name="letter" value="Y">Y</button></li>
+      <li><button type="submit" name="letter" value="U">U</button></li>
+      <li><button type="submit" name="letter" value="I">I</button></li>
+      <li><button type="submit" name="letter" value="O">O</button></li>
+      <li><button type="submit" name="letter" value="P">P</button></li>
+    </ul>
+    <ul id="midRow">
+      <li><button type="submit" name="letter" value="A">A</button></li>
+      <li><button type="submit" name="letter" value="S">S</button></li>
+      <li><button type="submit" name="letter" value="D">D</button></li>
+      <li><button type="submit" name="letter" value="F">F</button></li>
+      <li><button type="submit" name="letter" value="G">G</button></li>
+      <li><button type="submit" name="letter" value="H">H</button></li>
+      <li><button type="submit" name="letter" value="J">J</button></li>
+      <li><button type="submit" name="letter" value="K">K</button></li>
+      <li><button type="submit" name="letter" value="L">L</button></li>
+    </ul>
+    <ul id="bottomRow">
+      <li><button type="submit" name="letter" value="Z">Z</button></li>
+      <li><button type="submit" name="letter" value="X">X</button></li>
+      <li><button type="submit" name="letter" value="C">C</button></li>
+      <li><button type="submit" name="letter" value="V">V</button></li>
+      <li><button type="submit" name="letter" value="B">B</button></li>
+      <li><button type="submit" name="letter" value="N">N</button></li>
+      <li><button type="submit" name="letter" value="M">M</button></li>
+    </ul>
+  </form>
 
    <script type="text/javascript" src="main.js"></script>
    </body>
