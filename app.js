@@ -45,7 +45,27 @@ function startOver(req){
 }
 
 app.get('/', function (req, res) {
+
+  // If the word array is empty or non-existent, start a new game
+  if (req.sessionStore.wordArray == [] || typeof req.sessionStore.wordArray === "undefined"){
+    playMessage = "Welcome! A new game!!"
+    res.render('index',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
+  }
+
+  // If the visible array is the same as the word array, you've won
+  else if (req.sessionStore.wordArray == req.sessionStore.visibleWord){
+    res.render('win',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
+  }
+
+  // If you've run out of lives, you've lost
+  else if (lives <= 0) {
+    res.render('lose',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
+  }
+
+  // Otherwise, keep playing the game
+  else {
   res.render('index',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
+  }
 })
 
 app.get('/:dynamic', function (req, res) {
@@ -123,7 +143,6 @@ app.post('/guess',function(req,res){
     if (lives <= 0) {
       startOver(req);
     }
-
   }
 
   res.redirect("/");
@@ -134,29 +153,26 @@ app.post('/guess',function(req,res){
 
 })
 
-app.get("/win",function(req,res){
-
-  if (req.sessionStore.wordArray == req.sessionStore.visibleWord){
-    res.render('win',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
-  }
-  else {
-    playMessage = "Cheater! That cost you a turn."
-    lives -= 1;
-    res.redirect("/")
-  }
-
-})
-
-app.get("/lose",function(req,res){
-  if(lives <= 0){
-    playMessage = "Good effort!"
-  }
-  else {
-    playMessage = "Why did you give up? You still had lives left."
-  }
-
-  res.render('lose',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
-})
+// app.get("/win",function(req,res){
+//   if (req.sessionStore.wordArray == req.sessionStore.visibleWord){
+//     res.render('win',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
+//   }
+//   else {
+//     playMessage = "Cheater! That cost you a turn."
+//     lives -= 1;
+//     res.redirect("/")
+//   }
+// })
+//
+// app.get("/lose",function(req,res){
+//   if(lives <= 0){
+//     playMessage = "Good effort!"
+//   }
+//   else {
+//     playMessage = "Why did you give up? You still had lives left."
+//   }
+//   res.render('lose',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
+// })
 
 app.listen(port, function () {
 	  console.log('Successfully started express application!');
