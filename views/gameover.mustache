@@ -15,16 +15,34 @@
      <link rel="stylesheet" type="text/css" href="style.css">
    </head>
    <body>
-     <h1>You lost!</h1>
+
+     {{#playerData.won}}<p>You won!</p>{{/playerData.won}}
+     {{#playerData.lost}}<p>You lost!</p>{{/playerData.lost}}
+     {{#playerData.resigned}}<p>You resigned!</p>{{/playerData.resigned}}
+
     <p>The word was {{playerData.word}}</p>
-    <p>{{playMessage}}</p>
-    <br>
-    <p>Debug Message: you had {{playerData.lives}} left</p>
+    {{^playerData.lost}}
+    <p>You had {{playerData.lives}} guesses left</p>
+    {{/playerData.lost}}
+
+
 
     <form action="/new" method="post">
       <button type="submit" name="difficulty" value="easy">New Easy Word</button>
       <button type="submit" name="difficulty" value="medium">New Medium Word</button>
       <button type="submit" name="difficulty" value="hard">New Hard Word</button>
+    </form>
+
+    <form action="/highscoretable" method="post">
+      <button type="submit">High Score Table</button>
+    </form>
+
+    <form action="/playerhistory" method="post">
+      <button type="submit">Player History</button>
+    </form>
+
+    <form action="/logout" method="post">
+      <button type="submit">Logout</button>
     </form>
 
    <script type="text/javascript" src="main.js"></script>

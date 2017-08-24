@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const port = 3000;
 const mustache = require('mustache-express');
-const data = require('./data.js');
+const data = require('./data.json');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
@@ -23,7 +23,7 @@ app.engine('mustache', mustache());
 app.set('views', './views')
 app.set('view engine', 'mustache')
 
-let maxLives = 2;  //this should be 8 under ordinary circumstances
+let maxLives = 6;  //this should be 8 under ordinary circumstances
 let playMessage;
 let minLength;
 let maxLength;
@@ -42,6 +42,29 @@ function getNewWordLengthBetween(min,max){
   return newWord;
 }
 
+function findTheLongestWord(){
+  let longestWordsThusFar = ["a"];
+  for (i=0;i<words.length;i++){
+    // console.log(i,":",words[i])
+    if (words[i].length > longestWordsThusFar[0].length){
+      // console.log("\n\n\n\n\n\nfound a longer word!",words[i],"\n\n\n\n\n");
+      longestWordsThusFar = [words[i]];
+    }
+    else if (words[i].length == longestWordsThusFar[0].length) {
+      // console.log("\n\n\n\n\n\n\nFound an equal word!",words[i],"\n\n\n");
+      longestWordsThusFar.push(words[i]);
+    }
+  }
+  return longestWordsThusFar;
+}
+
+
+
+app.get('/longestword',function(req,res){
+  let longestWords = findTheLongestWord();
+  res.send(longestWords);
+})
+
 //accepts two equal-lengthed arrays and compares their contents, returning true if they are the same
 function arraysAreEqual(a,b){
   if (typeof a == "undefined" || typeof b == "undefined") {
@@ -54,6 +77,26 @@ function arraysAreEqual(a,b){
     }
   }
   return true;
+}
+
+function updateHighScoreTable(req,table) {
+  insertNewScore(req,table);
+  while (table.length > 10) {
+    table.pop();
+  }
+}
+
+function insertNewScore(req,table) {
+  newEntry = {};
+  newEntry.player = req.sessionStore.player;
+  newEntry.word = req.sessionStore.word;
+  newEntry.score = req.sessionStore.score;
+  for (i=0;i<table.length;i++){
+    if (newEntry.score >= highScoreTable[i].score){
+      table.splice(i,0,newEntry)
+      return
+    }
+  }
 }
 
 function startOver(req){
@@ -107,13 +150,25 @@ function startOver(req){
   req.session.wordArray = [...word];
   req.session.visibleWord = [];
   for (i=0;i<word.length;i++){
-    req.session.visibleWord.push("-");
+    req.session.visibleWord.push(" ");
   }
 }
 
+app.post('/resign',function(req,res){
+  req.session.score = 0;
+  req.session.won = false;
+  req.session.lost = false;
+  req.session.resigned = true;
+  res.render('gameover',{playerData:req.session,playMessage:playMessage})
+})
+
 app.post('/login', function(req,res){
   req.session.player = req.body.player;
-  res.redirect('/welcome')
+  res.render('welcome',{playerData:req.session,playMessage:playMessage})
+})
+
+app.post('/welcome', function(req,res){
+  res.render('welcome',{playerData:req.session,playMessage:playMessage})
 })
 
 app.get('/', function (req, res) {
@@ -129,13 +184,19 @@ app.get('/', function (req, res) {
   // If the visible array is the same as the word array, you've won
   else if (arraysAreEqual(req.session.wordArray,req.session.visibleWord)){
     // console.log("Second if");
-    res.render('win',{playerData:req.session,playMessage:playMessage})
+    req.session.won = true;
+    req.session.lost = false;
+    req.session.resigned = false;
+    res.render('gameover',{playerData:req.session,playMessage:playMessage})
   }
 
   // If you've run out of lives, you've lost
   else if (req.session.lives <= 0) {
     // console.log("Third if");
-    res.render('lose',{playerData:req.session,playMessage:playMessage})
+    req.session.won = false;
+    req.session.lost = true;
+    req.session.resigned = false;
+    res.render('gameover',{playerData:req.session,playMessage:playMessage})
   }
 
   // Otherwise, keep playing the game

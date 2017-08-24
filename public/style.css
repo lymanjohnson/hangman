@@ -3,12 +3,84 @@
   font-size: 18pt;
 }
 
-ul{
+#playMessage {
+  height: 14pt;
+  padding: 1%;
+  font-size: 14pt;
+  margin: 0;
+
+}
+
+.rowOfButtons {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
+}
+
+.visibleWord{
+  display: flex;
+  list-style: none;
+  width: 90%;
+  margin: 2% 0 2% 0;
+  flex-flow: nowrap;
+  text-align: center;
+  border: 1px solid black;
+  height: 32pt;
+  padding: 1%
+}
+
+.visibleLetter {
+  font-size: 32pt;
+  border-bottom: 1px solid black;
+  width: 60pt;
+  margin-left: 2%;
+}
+
+.guessedWord{
+  display: flex;
+  list-style: none;
+  width: 90%;
+  margin: 2% 0 2% 0;
+  flex-flow: nowrap;
+  text-align: center;
+  border: 1px solid black;
+  height: 32pt;
+  padding: 1%
+}
+
+.guessedLetter {
+  font-size: 32pt;
+  border-bottom: 1px solid black;
+  width: 60pt;
+  margin-left: 2%;
 
 }
+
+#rightHeader {
+  /*width: 20%;*/
+  display: flex;
+  flex-flow: column;
+  justify-content: space-around;
+  list-style: none;
+  text-align: right;
+  padding: 0;
+  margin: 0;
+}
+
+#leftHeader {
+  justify-content: space-around;
+  flex-flow: column;
+  padding: 0;
+  margin: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+}
+
+
 
 .caps , li button{
   text-transform: uppercase;
