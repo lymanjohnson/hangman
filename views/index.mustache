@@ -15,11 +15,11 @@
      <link rel="stylesheet" type="text/css" href="style.css">
    </head>
    <body>
-    <p>{{playerData.word}}</p>
-    <p>{{playerData.lives}}</p>
-    <p>{{#playerData.visibleWord}}  {{.}}  {{/playerData.visibleWord}}</p>
-    <p>{{#playerData.wordArray}}  {{.}}  {{/playerData.wordArray}}</p>
-    <p>{{#playerData.guesses}}  {{.}}  {{/playerData.guesses}}</p>
+    <p>Lives:{{playerData.lives}}</p>
+    <p>Score:{{playerData.score}}</p>
+    <p>Word: {{#playerData.visibleWord}}  {{.}}  {{/playerData.visibleWord}}</p>
+    <p>(Debug) Word:{{#playerData.wordArray}}  {{.}}  {{/playerData.wordArray}}</p>
+    <p>Guess: {{#playerData.guesses}}  {{.}}  {{/playerData.guesses}}</p>
 
     <p>{{playMessage}}</p>
 
@@ -29,7 +29,7 @@
       <button type="submit" name="difficulty" value="hard">New Hard Word</button>
     </form>
 
-    {{#word}}
+    {{#playerData.word}}
     <form action="/guess" method="post">
     <ul id="topRow">
       <li><button type="submit" name="letter" value="q">q</button></li>
@@ -64,7 +64,7 @@
       <li><button type="submit" name="letter" value="m">m</button></li>
     </ul>
   </form>
-  {{/word}}
+  {{/playerData.word}}
 
    <script type="text/javascript" src="main.js"></script>
 

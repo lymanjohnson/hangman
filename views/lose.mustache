@@ -16,10 +16,10 @@
    </head>
    <body>
      <h1>You lost!</h1>
-    <p>The word was {{word}}</p>
+    <p>The word was {{playerData.word}}</p>
     <p>{{playMessage}}</p>
     <br>
-    <p>Debug Message: you had {{lives}} left</p>
+    <p>Debug Message: you had {{playerData.lives}} left</p>
 
     <form action="/new" method="post">
       <button type="submit" name="difficulty" value="easy">New Easy Word</button>

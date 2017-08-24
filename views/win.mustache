@@ -16,8 +16,8 @@
    </head>
    <body>
      <h1>You won!</h1>
-    <p>The word was {{word}}</p>
-    <p>You still had {{lives}} left</p>
+    <p>The word was {{playerData.word}}</p>
+    <p>You still had {{playerData.lives}} left</p>
 
     <form action="/new" method="post">
       <button type="submit" name="difficulty" value="easy">New Easy Word</button>
