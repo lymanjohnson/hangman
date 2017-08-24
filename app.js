@@ -33,6 +33,20 @@ function getNewWord(){
   return newWord
 }
 
+//accepts two equal-lengthed arrays and compares their contents, returning true if they are the same
+function arraysAreEqual(a,b){
+  if (typeof a == "undefined" || typeof b == "undefined") {
+    return false;
+  }
+  
+  for (i=0;i<a.length;i++){
+    if (a[i] != b[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function startOver(req){
   word = getNewWord();
   lives = 8;
@@ -54,7 +68,7 @@ app.get('/', function (req, res) {
   console.log("\t visibleWord:",req.sessionStore.visibleWord);
   console.log("\t guesses:",req.sessionStore.guesses);
   console.log("First if: req.sessionStore.wordArray == [] || typeof req.sessionStore.wordArray === 'undefined'",req.sessionStore.wordArray == [] || typeof req.sessionStore.wordArray === 'undefined');
-  console.log("Second if: req.sessionStore.wordArray == req.sessionStore.visibleWord:",req.sessionStore.wordArray == req.sessionStore.visibleWord);
+  console.log("Second if: arraysAreEqual(req.sessionStore.wordArray,req.sessionStore.visibleWord):",arraysAreEqual(req.sessionStore.wordArray,req.sessionStore.visibleWord));
   console.log("Third if: lives <= 0",lives <= 0);
   // If the word array is empty or non-existent, start a new game
   if (req.sessionStore.wordArray == [] || typeof req.sessionStore.wordArray === "undefined"){
@@ -64,7 +78,7 @@ app.get('/', function (req, res) {
   }
 
   // If the visible array is the same as the word array, you've won
-  else if (req.sessionStore.wordArray == req.sessionStore.visibleWord){
+  else if (arraysAreEqual(req.sessionStore.wordArray,req.sessionStore.visibleWord)){
     console.log("Second if");
     res.render('win',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
   }
