@@ -26,11 +26,28 @@ app.set('view engine', 'mustache')
 let word;
 let lives;
 let playMessage;
+let minLength;
+let maxLength;
+let easyGameParams = {"min":3,"max":5}
+let mediumGameParams = {"min":6,"max":8}
+let hardGameParams = {"min":9,"max":100000000}
+
 let debugCount = 0;
+
+//easy words of 4-6 characters; medium mode only has words of 6-8 characters; hard mode only has words of 8+ characters.
 
 function getNewWord(){
   newWord = words[Math.floor(Math.random()*words.length)];
   return newWord
+}
+
+function getNewWordLengthBetween(min,max){
+  newWord = words[Math.floor(Math.random()*words.length)]; // seed a word
+  // As long as it's between min and max, keep generating new words
+  while (newWord.length < min || newWord.length > max) {
+    newWord = words[Math.floor(Math.random()*words.length)];
+  }
+  return newWord;
 }
 
 //accepts two equal-lengthed arrays and compares their contents, returning true if they are the same
@@ -48,9 +65,26 @@ function arraysAreEqual(a,b){
 }
 
 function startOver(req){
-  word = getNewWord();
+  req.sessionStore.difficulty = req.body.difficulty; //stores current difficulty setting
+  if (req.body.difficulty == "easy") {
+    minLength = easyGameParams.min;
+    maxLength = easyGameParams.max;
+  }
+
+  else if (req.body.difficulty == "hard") {
+    minLength = hardGameParams.min;
+    maxLength = hardGameParams.max;
+  }
+
+  else {
+    minLength = mediumGameParams.min;
+    maxLength = mediumGameParams.max;
+  }
+
+  word = getNewWordLengthBetween(minLength,maxLength);
   lives = 8;
-  playMessage = "";
+  playMessage = "Good luck!";
+
   req.sessionStore.guesses = [];
   req.sessionStore.wordArray = [...word];
   req.sessionStore.visibleWord = [];
