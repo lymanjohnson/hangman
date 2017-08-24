@@ -38,7 +38,7 @@ function arraysAreEqual(a,b){
   if (typeof a == "undefined" || typeof b == "undefined") {
     return false;
   }
-  
+
   for (i=0;i<a.length;i++){
     if (a[i] != b[i]) {
       return false;
@@ -168,9 +168,6 @@ app.post('/guess',function(req,res){
     req.sessionStore.guesses.push(req.body.letter);
     playMessage = "No match";
     lives -= 1;
-    if (lives <= 0) {
-      startOver(req);
-    }
   }
 
   res.redirect("/");
