@@ -23,9 +23,7 @@ app.engine('mustache', mustache());
 app.set('views', './views')
 app.set('view engine', 'mustache')
 
-let word;
 let maxLives = 8;  //this should track
-let score;
 let playMessage;
 let minLength;
 let maxLength;
@@ -34,13 +32,6 @@ let mediumGameParams = {"min":6,"max":8}
 let hardGameParams = {"min":9,"max":100000000}
 
 let debugCount = 0;
-
-//easy words of 4-6 characters; medium mode only has words of 6-8 characters; hard mode only has words of 8+ characters.
-
-function getNewWord(){
-  newWord = words[Math.floor(Math.random()*words.length)];
-  return newWord
-}
 
 function getNewWordLengthBetween(min,max){
   newWord = words[Math.floor(Math.random()*words.length)]; // seed a word
@@ -82,13 +73,11 @@ function startOver(req){
     maxLength = mediumGameParams.max;
   }
 
-  word = getNewWordLengthBetween(minLength,maxLength);
-  score = word.length*maxLives;
   playMessage = "Good luck!";
-
+  let word = getNewWordLengthBetween(minLength,maxLength);
   req.sessionStore.word = word;
   req.sessionStore.lives = maxLives;
-  req.sessionStore.score = score;
+  req.sessionStore.score = word*maxLives;
   req.sessionStore.guesses = [];
   req.sessionStore.wordArray = [...word];
   req.sessionStore.visibleWord = [];
@@ -112,35 +101,30 @@ app.get('/', function (req, res) {
   if (req.sessionStore.wordArray == [] || typeof req.sessionStore.wordArray === "undefined"){
     // //console.log("First if");
     playMessage = "Welcome! A new game!!"
-    req.sessionStore.score = req.sessionStore.word.length*req.sessionStore.lives;
     res.render('index',{playerData:req.sessionStore,playMessage:playMessage})
   }
 
   // If the visible array is the same as the word array, you've won
   else if (arraysAreEqual(req.sessionStore.wordArray,req.sessionStore.visibleWord)){
     // //console.log("Second if");
-    score = req.sessionStore.word.length*req.sessionStore.lives;
     res.render('win',{playerData:req.sessionStore,playMessage:playMessage})
   }
 
   // If you've run out of lives, you've lost
   else if (lives <= 0) {
     // //console.log("Third if");
-    score = word.length*lives;
     res.render('lose',{playerData:req.sessionStore,playMessage:playMessage})
   }
 
   // Otherwise, keep playing the game
   else {
     // //console.log("Else");
-  score = word.length*lives;
   res.render('index',{playerData:req.sessionStore,playMessage:playMessage})
   }
 })
 
 app.get('/:dynamic', function (req, res) {
   playMessage = "";
-  score = word.length*lives;
   res.redirect("/");
 })
 
@@ -209,8 +193,10 @@ app.post('/guess',function(req,res){
 
   else {
     req.sessionStore.guesses.push(req.body.letter);
+    req.sessionStore.lives -= 1;
+    req.sessionStore.score = req.sessionStore.word.length*req.sessionStore.lives;
     playMessage = "No match";
-    lives -= 1;
+
   }
 
   res.redirect("/");
