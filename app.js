@@ -23,7 +23,7 @@ app.engine('mustache', mustache());
 app.set('views', './views')
 app.set('view engine', 'mustache')
 
-let maxLives = 8;  //this should track
+let maxLives = 2;  //this should be 8 under ordinary circumstances
 let playMessage;
 let minLength;
 let maxLength;
@@ -75,7 +75,31 @@ function startOver(req){
 
   playMessage = "Good luck!";
   let word = getNewWordLengthBetween(minLength,maxLength);
-  // console.log(word);
+
+  console.log("req.body.player",req.body.player);
+  console.log(typeof req.body.player);
+
+  //checks to see if no new player name was entered
+  if (typeof req.body.player == "undefined" || req.body.player == "") {
+
+    //then it checks to see if there was already a player name
+    if (typeof req.sessionStore.player == "undefined" || req.sessionStore.player == ""){
+      //if not, it calls you "New Challenger"
+      req.sessionStore.player = "New Challenger";
+    }
+    //otherwise you must have already entered a name
+    else {
+      //in which case we just keep it (we probably don't need this else line at all)
+      req.sessionStore.player = req.sessionStore.player;
+    }
+  }
+  
+  //this triggers if a new player name was entered
+  else {
+    req.sessionStore.player = req.body.player;
+
+  }
+
   req.sessionStore.word = word;
   req.sessionStore.lives = maxLives;
   req.sessionStore.score = word.length*maxLives;
@@ -85,8 +109,6 @@ function startOver(req){
   for (i=0;i<word.length;i++){
     req.sessionStore.visibleWord.push("-");
   }
-// console.log(req.sessionStore.word,req.sessionStore.lives,req.sessionStore.score);
-
 }
 
 app.get('/', function (req, res) {
@@ -96,7 +118,7 @@ app.get('/', function (req, res) {
     // console.log("First if");
     playMessage = "Welcome! A new game!!"
     // console.log(req.sessionStore.word,req.sessionStore.lives,req.sessionStore.score);
-    res.render('index',{playerData:req.sessionStore,playMessage:playMessage})
+    res.render('welcome',{playerData:req.sessionStore,playMessage:playMessage})
   }
 
   // If the visible array is the same as the word array, you've won

@@ -14,19 +14,18 @@
      <link href="https://fonts.googleapis.com/css?family=Cousine" rel="stylesheet">
      <link rel="stylesheet" type="text/css" href="style.css">
    </head>
+
    <body>
-     <h1>You lost!</h1>
-    <p>The word was {{playerData.word}}</p>
-    <p>{{playMessage}}</p>
-    <br>
-    <p>Debug Message: you had {{playerData.lives}} left</p>
+
 
     <form action="/new" method="post">
+      <input type="text" name="player" placeholder="Your Name">
       <button type="submit" name="difficulty" value="easy">New Easy Word</button>
       <button type="submit" name="difficulty" value="medium">New Medium Word</button>
       <button type="submit" name="difficulty" value="hard">New Hard Word</button>
     </form>
 
    <script type="text/javascript" src="main.js"></script>
+
    </body>
  </html>

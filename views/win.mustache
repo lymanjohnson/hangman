@@ -11,13 +11,14 @@
      <!-- Use maximum-scale and user-scalable at your own risk. It disables pinch/zoom. Think about usability/accessibility before including.-->
      <!-- <meta name="letter" value="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" /> -->
      <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-     <link href="https://fonts.googleapis.com/css?family=Nova+Mono" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css?family=Cousine" rel="stylesheet">
      <link rel="stylesheet" type="text/css" href="style.css">
    </head>
    <body>
      <h1>You won!</h1>
     <p>The word was {{playerData.word}}</p>
     <p>You still had {{playerData.lives}} left</p>
+    <p>Your score was {{playerData.score}} left</p>
 
     <form action="/new" method="post">
       <button type="submit" name="difficulty" value="easy">New Easy Word</button>

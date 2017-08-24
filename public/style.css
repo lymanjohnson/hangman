@@ -1,5 +1,5 @@
 * {
-  font-family: 'Nova Mono', monospace;
+  font-family: 'Cousine',monospace;
   font-size: 18pt;
 }
 
@@ -7,4 +7,9 @@ ul{
   display: flex;
   flex-wrap: wrap;
   list-style: none;
+
+}
+
+.caps , li button{
+  text-transform: uppercase;
 }

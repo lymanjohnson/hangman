@@ -11,15 +11,16 @@
      <!-- Use maximum-scale and user-scalable at your own risk. It disables pinch/zoom. Think about usability/accessibility before including.-->
      <!-- <meta name="letter" value="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" /> -->
      <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-     <link href="https://fonts.googleapis.com/css?family=Nova+Mono" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css?family=Cousine" rel="stylesheet">
      <link rel="stylesheet" type="text/css" href="style.css">
    </head>
    <body>
+    <p>Welcome, {{playerData.player}}</p>
     <p>Lives:{{playerData.lives}}</p>
     <p>Score:{{playerData.score}}</p>
-    <p>Word: {{#playerData.visibleWord}}  {{.}}  {{/playerData.visibleWord}}</p>
-    <p>(Debug) Word:{{#playerData.wordArray}}  {{.}}  {{/playerData.wordArray}}</p>
-    <p>Guess: {{#playerData.guesses}}  {{.}}  {{/playerData.guesses}}</p>
+    <p class="caps">Word: {{#playerData.visibleWord}}  {{.}}  {{/playerData.visibleWord}}</p>
+    <p class="caps">(Debug) Word:{{#playerData.wordArray}}  {{.}}  {{/playerData.wordArray}}</p>
+    <p class="caps">Guess: {{#playerData.guesses}}  {{.}}  {{/playerData.guesses}}</p>
 
     <p>{{playMessage}}</p>
 
