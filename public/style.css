@@ -8,7 +8,18 @@
   padding: 1%;
   font-size: 14pt;
   margin: 0;
+}
 
+#playArea{
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+#wordsArea{
+  display: flex;
+  flex-flow: column;
+  flex-grow: 1;
 }
 
 .rowOfButtons {
@@ -20,14 +31,22 @@
 .visibleWord{
   display: flex;
   list-style: none;
-  width: 90%;
+  /*width: 90%;*/
   margin: 2% 0 2% 0;
   flex-flow: nowrap;
   text-align: center;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   height: 32pt;
   padding: 1%
 }
+
+.image{
+  height: 200px;
+  width: 200px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
 
 .visibleLetter {
   font-size: 32pt;
@@ -39,11 +58,11 @@
 .guessedWord{
   display: flex;
   list-style: none;
-  width: 90%;
+  /*width: 90%;*/
   margin: 2% 0 2% 0;
   flex-flow: nowrap;
   text-align: center;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   height: 32pt;
   padding: 1%
 }
@@ -80,8 +99,35 @@ header {
   border-bottom: 1px solid black;
 }
 
-
-
 .caps , li button{
   text-transform: uppercase;
+}
+
+
+#health1{
+  background-image: url("./1.jpg");
+}
+
+#health2{
+  background-image: url("./2.jpg");
+}
+
+#health3{
+  background-image: url("./3.jpg");
+}
+
+#health4{
+  background-image: url("./4.jpg");
+}
+
+#health5{
+  background-image: url("./5.jpg");
+}
+
+#health6{
+  background-image: url("./6.jpg");
+}
+
+#health7{
+  background-image: url("./7.jpg");
 }

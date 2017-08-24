@@ -23,7 +23,7 @@ app.engine('mustache', mustache());
 app.set('views', './views')
 app.set('view engine', 'mustache')
 
-let maxLives = 6;  //this should be 8 under ordinary circumstances
+let maxLives = 7;  //this should be 7 under ordinary circumstances
 let playMessage;
 let minLength;
 let maxLength;

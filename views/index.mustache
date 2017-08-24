@@ -27,6 +27,9 @@
 <p class="caps">(Debug) Word:{{#playerData.wordArray}}  {{.}}  {{/playerData.wordArray}}</p>
     <div id="playMessage">{{playMessage}}</div>
 
+<div id = "playArea">
+
+  <div id="wordsArea">
       <ul class="visibleWord">
       {{#playerData.visibleWord}}
         <li class="visibleLetter">{{.}}</li>
@@ -38,6 +41,10 @@
       <li class="guessedLetter">{{.}}</li>
     {{/playerData.guesses}}
     </ul>
+  </div>
+
+  <div class="image" id="health{{playerData.lives}}"></div>
+  </div>
 
     {{#playerData.word}}
     <form action="/guess" method="post">
