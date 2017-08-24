@@ -26,6 +26,7 @@ app.set('view engine', 'mustache')
 let word;
 let lives;
 let playMessage;
+let debugCount = 0;
 
 function getNewWord(){
   newWord = words[Math.floor(Math.random()*words.length)];
@@ -36,7 +37,6 @@ function startOver(req){
   word = getNewWord();
   lives = 8;
   playMessage = "";
-  debugCount = 0;
   req.sessionStore.guesses = [];
   req.sessionStore.wordArray = [...word];
   req.sessionStore.visibleWord = [];
@@ -51,26 +51,33 @@ app.get('/', function (req, res) {
   console.log("\t Lives:",lives);
   console.log("\t Word:",word);
   console.log("\t wordArray:",req.sessionStore.wordArray);
-  console.log("\t guesses:",req.sessionStore.guesses);
   console.log("\t visibleWord:",req.sessionStore.visibleWord);
+  console.log("\t guesses:",req.sessionStore.guesses);
+  console.log("First if: req.sessionStore.wordArray == [] || typeof req.sessionStore.wordArray === 'undefined'",req.sessionStore.wordArray == [] || typeof req.sessionStore.wordArray === 'undefined');
+  console.log("Second if: req.sessionStore.wordArray == req.sessionStore.visibleWord:",req.sessionStore.wordArray == req.sessionStore.visibleWord);
+  console.log("Third if: lives <= 0",lives <= 0);
   // If the word array is empty or non-existent, start a new game
   if (req.sessionStore.wordArray == [] || typeof req.sessionStore.wordArray === "undefined"){
+    console.log("First if");
     playMessage = "Welcome! A new game!!"
     res.render('index',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
   }
 
   // If the visible array is the same as the word array, you've won
   else if (req.sessionStore.wordArray == req.sessionStore.visibleWord){
+    console.log("Second if");
     res.render('win',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
   }
 
   // If you've run out of lives, you've lost
   else if (lives <= 0) {
+    console.log("Third if");
     res.render('lose',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
   }
 
   // Otherwise, keep playing the game
   else {
+    console.log("Else");
   res.render('index',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
   }
 })
@@ -118,12 +125,12 @@ function isAlreadyGuessed(req){
 
 function isLetterCorrect(req){
   let found = false;
-  console.log("isLetterCorrect called");
+  // console.log("isLetterCorrect called");
   for (i=0;i<req.sessionStore.wordArray.length;i++){
-    console.log(i);
+    // console.log(i);
     if (req.sessionStore.wordArray[i] == req.body.letter){
       found = true;
-      console.log("true!");
+      // console.log("true!");
       req.sessionStore.visibleWord[i] = req.sessionStore.wordArray[i];
     }
   }
@@ -133,12 +140,12 @@ function isLetterCorrect(req){
 app.post('/guess',function(req,res){
 
   if (isAlreadyGuessed(req)){
-    console.log("already guessed");
+    // console.log("already guessed");
     playMessage = "You already guessed that";
   }
 
   else if (isLetterCorrect(req)) {
-    console.log("letter is correct");
+    // console.log("letter is correct");
     playMessage = "Nice!";
     //turn over the correct letters
   }
