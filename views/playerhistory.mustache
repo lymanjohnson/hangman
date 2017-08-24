@@ -14,39 +14,12 @@
      <link href="https://fonts.googleapis.com/css?family=Cousine" rel="stylesheet">
      <link rel="stylesheet" type="text/css" href="style.css">
    </head>
-
    <body>
-
-     {{#playerData.player}}
-     <p>Welcome, {{playerData.player}}</p>
-    <form action="/new" method="post">
-      <input type="text" name="player" placeholder="Your Name">
-      <button type="submit" name="difficulty" value="easy">New Easy Word</button>
-      <button type="submit" name="difficulty" value="medium">New Medium Word</button>
-      <button type="submit" name="difficulty" value="hard">New Hard Word</button>
-    </form>
-
-    <form action="/highscoretable" method="post">
-      <button type="submit">High Score Table</button>
-    </form>
-
-    <form action="/playerhistory" method="post">
-      <button type="submit">Player History</button>
-    </form>
-
-    <form action="/logout" method="post">
-      <button type="submit">Logout</button>
-    </form>
-
-    {{/playerData.player}}
-
-    {{^playerData.player}}Please Login
-    <form action="/login" method="post">
-      <input type="text" name="player" placeholder="Your Name">
-    </form>
-    {{/playerData.player}}
+     <p>Player history goes here</p>
+     <form action="/logout" method="post">
+       <button type="submit">Logout</button>
+     </form>
 
    <script type="text/javascript" src="main.js"></script>
-
    </body>
  </html>

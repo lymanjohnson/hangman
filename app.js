@@ -111,6 +111,11 @@ function startOver(req){
   }
 }
 
+app.post('/login', function(req,res){
+  req.session.player = req.body.player;
+  res.redirect('/welcome')
+})
+
 app.get('/', function (req, res) {
   debugCount += 1;
   // If the word array is empty or non-existent, start a new game
@@ -158,6 +163,15 @@ app.post('/logout', function(req,res) {
   console.log("req.session:",req.session);
   res.redirect('/');
 })
+
+app.post('/highscoretable', function(req,res) {
+  res.render('highscoretable',{playerData:req.session,playMessage:playMessage})
+})
+
+app.post('/playerhistory', function(req,res) {
+  res.render('playerhistory',{playerData:req.session,playMessage:playMessage})
+})
+
 
 function isAlreadyGuessed(req){
   for (i=0;i<req.session.guesses.length;i++){
