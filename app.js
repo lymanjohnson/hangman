@@ -36,6 +36,7 @@ function startOver(req){
   word = getNewWord();
   lives = 8;
   playMessage = "";
+  debugCount = 0;
   req.sessionStore.guesses = [];
   req.sessionStore.wordArray = [...word];
   req.sessionStore.visibleWord = [];
@@ -45,7 +46,13 @@ function startOver(req){
 }
 
 app.get('/', function (req, res) {
-
+  debugCount += 1;
+  console.log("Hit '/' for the",debugCount+"th time.");
+  console.log("\t Lives:",lives);
+  console.log("\t Word:",word);
+  console.log("\t wordArray:",req.sessionStore.wordArray);
+  console.log("\t guesses:",req.sessionStore.guesses);
+  console.log("\t visibleWord:",req.sessionStore.visibleWord);
   // If the word array is empty or non-existent, start a new game
   if (req.sessionStore.wordArray == [] || typeof req.sessionStore.wordArray === "undefined"){
     playMessage = "Welcome! A new game!!"
