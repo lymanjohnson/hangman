@@ -57,7 +57,7 @@ function arraysAreEqual(a,b){
 }
 
 function startOver(req){
-  req.sessionStore.difficulty = req.body.difficulty; //stores current difficulty setting
+  req.session.difficulty = req.body.difficulty; //stores current difficulty setting
   if (req.body.difficulty == "easy") {
     minLength = easyGameParams.min;
     maxLength = easyGameParams.max;
@@ -83,60 +83,60 @@ function startOver(req){
   if (typeof req.body.player == "undefined" || req.body.player == "") {
 
     //then it checks to see if there was already a player name
-    if (typeof req.sessionStore.player == "undefined" || req.sessionStore.player == ""){
+    if (typeof req.session.player == "undefined" || req.session.player == ""){
       //if not, it calls you "New Challenger"
-      req.sessionStore.player = "New Challenger";
+      req.session.player = "New Challenger";
     }
     //otherwise you must have already entered a name
     else {
       //in which case we just keep it (we probably don't need this else line at all)
-      req.sessionStore.player = req.sessionStore.player;
+      req.session.player = req.session.player;
     }
   }
-  
+
   //this triggers if a new player name was entered
   else {
-    req.sessionStore.player = req.body.player;
+    req.session.player = req.body.player;
 
   }
 
-  req.sessionStore.word = word;
-  req.sessionStore.lives = maxLives;
-  req.sessionStore.score = word.length*maxLives;
-  req.sessionStore.guesses = [];
-  req.sessionStore.wordArray = [...word];
-  req.sessionStore.visibleWord = [];
+  req.session.word = word;
+  req.session.lives = maxLives;
+  req.session.score = word.length*maxLives;
+  req.session.guesses = [];
+  req.session.wordArray = [...word];
+  req.session.visibleWord = [];
   for (i=0;i<word.length;i++){
-    req.sessionStore.visibleWord.push("-");
+    req.session.visibleWord.push("-");
   }
 }
 
 app.get('/', function (req, res) {
   debugCount += 1;
   // If the word array is empty or non-existent, start a new game
-  if (req.sessionStore.wordArray == [] || typeof req.sessionStore.wordArray === "undefined"){
+  if (req.session.wordArray == [] || typeof req.session.wordArray === "undefined"){
     // console.log("First if");
     playMessage = "Welcome! A new game!!"
-    // console.log(req.sessionStore.word,req.sessionStore.lives,req.sessionStore.score);
-    res.render('welcome',{playerData:req.sessionStore,playMessage:playMessage})
+    // console.log(req.session.word,req.session.lives,req.session.score);
+    res.render('welcome',{playerData:req.session,playMessage:playMessage})
   }
 
   // If the visible array is the same as the word array, you've won
-  else if (arraysAreEqual(req.sessionStore.wordArray,req.sessionStore.visibleWord)){
+  else if (arraysAreEqual(req.session.wordArray,req.session.visibleWord)){
     // console.log("Second if");
-    res.render('win',{playerData:req.sessionStore,playMessage:playMessage})
+    res.render('win',{playerData:req.session,playMessage:playMessage})
   }
 
   // If you've run out of lives, you've lost
-  else if (req.sessionStore.lives <= 0) {
+  else if (req.session.lives <= 0) {
     // console.log("Third if");
-    res.render('lose',{playerData:req.sessionStore,playMessage:playMessage})
+    res.render('lose',{playerData:req.session,playMessage:playMessage})
   }
 
   // Otherwise, keep playing the game
   else {
     // console.log("Else");
-  res.render('index',{playerData:req.sessionStore,playMessage:playMessage})
+  res.render('index',{playerData:req.session,playMessage:playMessage})
   }
 })
 
@@ -150,17 +150,26 @@ app.post('/new', function(req,res) {
   res.redirect('/');
 })
 
-function isAlreadyGuessed(req){
-  for (i=0;i<req.sessionStore.guesses.length;i++){
+app.post('/logout', function(req,res) {
+  console.log("got to /logout");
+  console.log("req.session:",req.session);
+  req.session.destroy();
+  console.log("destroyed!");
+  console.log("req.session:",req.session);
+  res.redirect('/');
+})
 
-    if (req.body.letter == req.sessionStore.guesses[i]){
+function isAlreadyGuessed(req){
+  for (i=0;i<req.session.guesses.length;i++){
+
+    if (req.body.letter == req.session.guesses[i]){
       return true;
     }
   }
 
-  for (i=0;i<req.sessionStore.visibleWord.length;i++){
+  for (i=0;i<req.session.visibleWord.length;i++){
 
-    if (req.body.letter == req.sessionStore.visibleWord[i]){
+    if (req.body.letter == req.session.visibleWord[i]){
       return true;
     }
   }
@@ -170,10 +179,10 @@ function isAlreadyGuessed(req){
 
 function isLetterCorrect(req){
   let found = false;
-  for (i=0;i<req.sessionStore.wordArray.length;i++){
-    if (req.sessionStore.wordArray[i] == req.body.letter){
+  for (i=0;i<req.session.wordArray.length;i++){
+    if (req.session.wordArray[i] == req.body.letter){
       found = true;
-      req.sessionStore.visibleWord[i] = req.sessionStore.wordArray[i];
+      req.session.visibleWord[i] = req.session.wordArray[i];
     }
   }
   return found;
@@ -191,9 +200,9 @@ app.post('/guess',function(req,res){
   }
 
   else {
-    req.sessionStore.guesses.push(req.body.letter);
-    req.sessionStore.lives -= 1;
-    req.sessionStore.score = req.sessionStore.word.length*req.sessionStore.lives;
+    req.session.guesses.push(req.body.letter);
+    req.session.lives -= 1;
+    req.session.score = req.session.word.length*req.session.lives;
     playMessage = "No match";
 
   }

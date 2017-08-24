@@ -30,6 +30,10 @@
       <button type="submit" name="difficulty" value="hard">New Hard Word</button>
     </form>
 
+    <form action="/logout" method="post">
+      <button type="submit">Logout</button>
+    </form>
+
     {{#playerData.word}}
     <form action="/guess" method="post">
     <ul id="topRow">
