@@ -25,6 +25,7 @@ app.set('view engine', 'mustache')
 
 let word;
 let lives;
+let playMessage;
 
 function getNewWord(){
   newWord = words[Math.floor(Math.random()*words.length)];
@@ -34,6 +35,7 @@ function getNewWord(){
 function startOver(req){
   word = getNewWord();
   lives = 8;
+  playMessage = "";
   req.sessionStore.guesses = [];
   req.sessionStore.wordArray = [...word];
   req.sessionStore.visibleWord = [];
@@ -43,10 +45,11 @@ function startOver(req){
 }
 
 app.get('/', function (req, res) {
-  res.render('index',{word:word,lives:lives,playerData:req.sessionStore})
+  res.render('index',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
 })
 
-app.get('/guess', function (req, res) {
+app.get('/:dynamic', function (req, res) {
+  playMessage = "";
   res.redirect("/");
 })
 
@@ -69,6 +72,19 @@ function isAlreadyGuessed(req){
       return true;
     }
   }
+
+  for (i=0;i<req.sessionStore.visibleWord.length;i++){
+    // console.log("\ti:",i);
+    // console.log("\treq.sessionStore.guesses[i]",req.sessionStore.guesses[i]);
+    // console.log("\treq.body.letter",req.body.letter);
+    // console.log("\treq.body.letter == req.sessionStore.guess[i]",req.body.letter == req.sessionStore.guesses[i]);
+
+    if (req.body.letter == req.sessionStore.visibleWord[i]){
+      // console.log("already guessed!");
+      return true;
+    }
+  }
+
   // console.log("not already guessed!");
   return false;
 }
@@ -91,15 +107,18 @@ app.post('/guess',function(req,res){
 
   if (isAlreadyGuessed(req)){
     console.log("already guessed");
+    playMessage = "You already guessed that";
   }
 
   else if (isLetterCorrect(req)) {
     console.log("letter is correct");
+    playMessage = "Nice!";
     //turn over the correct letters
   }
 
   else {
     req.sessionStore.guesses.push(req.body.letter);
+    playMessage = "No match";
     lives -= 1;
     if (lives <= 0) {
       startOver(req);
@@ -113,6 +132,30 @@ app.post('/guess',function(req,res){
   // console.log("visibleWord:",req.sessionStore.visibleWord);
   // console.log("wordArray:",req.sessionStore.wordArray);
 
+})
+
+app.get("/win",function(req,res){
+
+  if (req.sessionStore.wordArray == req.sessionStore.visibleWord){
+    res.render('win',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
+  }
+  else {
+    playMessage = "Cheater! That cost you a turn."
+    lives -= 1;
+    res.redirect("/")
+  }
+
+})
+
+app.get("/lose",function(req,res){
+  if(lives <= 0){
+    playMessage = "Good effort!"
+  }
+  else {
+    playMessage = "Why did you give up? You still had lives left."
+  }
+
+  res.render('lose',{word:word,lives:lives,playerData:req.sessionStore,playMessage:playMessage})
 })
 
 app.listen(port, function () {

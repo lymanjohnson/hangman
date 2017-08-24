@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <title></title>
+     <meta name="letter" value="description" content="" />
+     <meta name="letter" value="author" content="Lyman Johnson" />
+     <meta name="letter" value="HandheldFriendly" content="true" />
+     <meta name="letter" value="MobileOptimized" content="320" />
+     <!-- Use maximum-scale and user-scalable at your own risk. It disables pinch/zoom. Think about usability/accessibility before including.-->
+     <!-- <meta name="letter" value="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" /> -->
+     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+     <link href="https://fonts.googleapis.com/css?family=Nova+Mono" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="style.css">
+   </head>
+   <body>
+     <h1>You lost!</h1>
+    <p>The word was {{word}}</p>
+    <p>{{playMessage}}</p>
+    <br>
+    <p>Debug Message: you had {{lives}} left</p>
+
+    <form action="/new" method="post">
+      <button type="submit" name="letter" value="reset">New Word</button>
+    </form>
+
+   <script type="text/javascript" src="main.js"></script>
+   </body>
+ </html>

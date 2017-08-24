@@ -11,6 +11,7 @@
      <!-- Use maximum-scale and user-scalable at your own risk. It disables pinch/zoom. Think about usability/accessibility before including.-->
      <!-- <meta name="letter" value="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" /> -->
      <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+     <link href="https://fonts.googleapis.com/css?family=Nova+Mono" rel="stylesheet">
      <link rel="stylesheet" type="text/css" href="style.css">
    </head>
    <body>
@@ -20,11 +21,13 @@
     <p>{{#playerData.wordArray}}  {{.}}  {{/playerData.wordArray}}</p>
     <p>{{#playerData.guesses}}  {{.}}  {{/playerData.guesses}}</p>
 
+    <p>{{playMessage}}</p>
+
     <form action="/new" method="post">
       <button type="submit" name="letter" value="reset">New Word</button>
     </form>
 
-    {{#playerData}}
+    {{#word}}
     <form action="/guess" method="post">
     <ul id="topRow">
       <li><button type="submit" name="letter" value="q">q</button></li>
@@ -59,7 +62,7 @@
       <li><button type="submit" name="letter" value="m">m</button></li>
     </ul>
   </form>
-  {{/playerData}}
+  {{/word}}
 
    <script type="text/javascript" src="main.js"></script>
    </body>
