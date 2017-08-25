@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const fs = require('fs');
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+let dataFile;
 
 app.use(express.static(__dirname + '/public'));
 
@@ -60,6 +61,8 @@ function findTheLongestWord(){
 
 
 
+
+
 app.get('/longestword',function(req,res){
   let longestWords = findTheLongestWord();
   res.send(longestWords);
@@ -79,6 +82,43 @@ function arraysAreEqual(a,b){
   return true;
 }
 
+
+//PICK UP HERE... this is how you open the data file...
+fs.readFile('data.json','utf8', function(err,data){
+  if (err){
+    console.log(err);
+  }
+  else{
+    dataFile = JSON.parse(data);
+    console.log(dataFile);
+    highScoreTable = dataFile.highScoreTable;
+    players = dataFile.players;
+
+    for (i=0;i<players.length;i++){
+      if (players[i].player == req.session.player){
+
+      }
+
+    }
+  }
+});
+
+
+
+// app.post("/", function (req, res) {
+//   var addtolist = req.body.inputtodo; //Gets the text in the input tag with name ="inputtodo"
+//   fs.readFile('data.json', 'utf8', function readFileCallback(err, data){
+//       if (err){
+//           console.log(err);
+//       } else {
+//       obj = JSON.parse(data); //now its an object
+//       obj.todoArray.push(addtolist); //pushes the text to an array
+//       json = JSON.stringify(obj); //converts back to json
+//       fs.writeFile('data.json', json, 'utf8'); // writes to file
+//   }});
+//   res.redirect('/'); //reloads page
+// });
+
 function updateHighScoreTable(req,table) {
   insertNewScore(req,table);
   while (table.length > 10) {
@@ -92,7 +132,7 @@ function insertNewScore(req,table) {
   newEntry.word = req.sessionStore.word;
   newEntry.score = req.sessionStore.score;
   for (i=0;i<table.length;i++){
-    if (newEntry.score >= highScoreTable[i].score){
+    if (newEntry.score >= table[i].score){
       table.splice(i,0,newEntry)
       return
     }
