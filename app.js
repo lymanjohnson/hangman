@@ -43,31 +43,6 @@ function getNewWordLengthBetween(min,max){
   return newWord;
 }
 
-function findTheLongestWord(){
-  let longestWordsThusFar = ["a"];
-  for (i=0;i<words.length;i++){
-    // console.log(i,":",words[i])
-    if (words[i].length > longestWordsThusFar[0].length){
-      // console.log("\n\n\n\n\n\nfound a longer word!",words[i],"\n\n\n\n\n");
-      longestWordsThusFar = [words[i]];
-    }
-    else if (words[i].length == longestWordsThusFar[0].length) {
-      // console.log("\n\n\n\n\n\n\nFound an equal word!",words[i],"\n\n\n");
-      longestWordsThusFar.push(words[i]);
-    }
-  }
-  return longestWordsThusFar;
-}
-
-
-
-
-
-app.get('/longestword',function(req,res){
-  let longestWords = findTheLongestWord();
-  res.send(longestWords);
-})
-
 //accepts two equal-lengthed arrays and compares their contents, returning true if they are the same
 function arraysAreEqual(a,b){
   if (typeof a == "undefined" || typeof b == "undefined") {
@@ -84,24 +59,24 @@ function arraysAreEqual(a,b){
 
 
 //PICK UP HERE... this is how you open the data file...
-fs.readFile('data.json','utf8', function(err,data){
-  if (err){
-    console.log(err);
-  }
-  else{
-    dataFile = JSON.parse(data);
-    console.log(dataFile);
-    highScoreTable = dataFile.highScoreTable;
-    players = dataFile.players;
-
-    for (i=0;i<players.length;i++){
-      if (players[i].player == req.session.player){
-
-      }
-
-    }
-  }
-});
+// fs.readFile('data.json','utf8', function(err,data){
+//   if (err){
+//     console.log(err);
+//   }
+//   else{
+//     dataFile = JSON.parse(data);
+//     console.log(dataFile);
+//     highScoreTable = dataFile.highScoreTable;
+//     players = dataFile.players;
+//
+//     for (i=0;i<players.length;i++){
+//       if (players[i].player == req.session.player){
+//
+//       }
+//
+//     }
+//   }
+// });
 
 
 
@@ -330,4 +305,35 @@ app.post('/guess',function(req,res){
 
 app.listen(port, function () {
 	  console.log('Successfully started express application!');
+})
+
+
+
+
+
+
+
+
+/////
+
+
+function findTheLongestWord(){
+  let longestWordsThusFar = ["a"];
+  for (i=0;i<words.length;i++){
+    // console.log(i,":",words[i])
+    if (words[i].length > longestWordsThusFar[0].length){
+      // console.log("\n\n\n\n\n\nfound a longer word!",words[i],"\n\n\n\n\n");
+      longestWordsThusFar = [words[i]];
+    }
+    else if (words[i].length == longestWordsThusFar[0].length) {
+      // console.log("\n\n\n\n\n\n\nFound an equal word!",words[i],"\n\n\n");
+      longestWordsThusFar.push(words[i]);
+    }
+  }
+  return longestWordsThusFar;
+}
+
+app.get('/longestword',function(req,res){
+  let longestWords = findTheLongestWord();
+  res.send(longestWords);
 })
