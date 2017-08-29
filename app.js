@@ -11,6 +11,24 @@ const fs = require('fs');
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 let dataFile;
 
+
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
+const mongoURL = 'mongodb://localhost:27017/hangman';
+
+
+// app.use('/highscoretable', function (req, res) {
+//   MongoClient.connect(mongoURL, function (err, db) {
+//     const highscoretable = db.collection('highscoretable');
+//     highscoretable.find({}).toArray(function (err, docs) {
+//       res.render("index", {restaurants: docs})
+//     })
+//   })
+// })
+
+
+
+
 app.use(express.static(__dirname + '/public'));
 
 app.use(bodyParser.json());
@@ -34,6 +52,7 @@ let hardGameParams = {"min":9,"max":100000000}
 
 let debugCount = 0;
 
+//will return a word between min and max length
 function getNewWordLengthBetween(min,max){
   newWord = words[Math.floor(Math.random()*words.length)]; // seed a word
   // As long as it's between min and max, keep generating new words
@@ -59,24 +78,6 @@ function arraysAreEqual(a,b){
 
 
 //PICK UP HERE... this is how you open the data file...
-// fs.readFile('data.json','utf8', function(err,data){
-//   if (err){
-//     console.log(err);
-//   }
-//   else{
-//     dataFile = JSON.parse(data);
-//     console.log(dataFile);
-//     highScoreTable = dataFile.highScoreTable;
-//     players = dataFile.players;
-//
-//     for (i=0;i<players.length;i++){
-//       if (players[i].player == req.session.player){
-//
-//       }
-//
-//     }
-//   }
-// });
 
 
 
@@ -94,6 +95,7 @@ function arraysAreEqual(a,b){
 //   res.redirect('/'); //reloads page
 // });
 
+//Will eventually update a high score table. Doesn't work yet.
 function updateHighScoreTable(req,table) {
   insertNewScore(req,table);
   while (table.length > 10) {
@@ -101,6 +103,7 @@ function updateHighScoreTable(req,table) {
   }
 }
 
+// Will eventually insert a new score from req into a high score table. Doesn't work yet.
 function insertNewScore(req,table) {
   newEntry = {};
   newEntry.player = req.sessionStore.player;
@@ -114,8 +117,12 @@ function insertNewScore(req,table) {
   }
 }
 
+// Resets the game
 function startOver(req){
   req.session.difficulty = req.body.difficulty; //stores current difficulty setting
+
+  // Next three blocks pull min and max word length from difficult parameters and stores them in this session
+
   if (req.body.difficulty == "easy") {
     minLength = easyGameParams.min;
     maxLength = easyGameParams.max;
@@ -131,8 +138,8 @@ function startOver(req){
     maxLength = mediumGameParams.max;
   }
 
-  playMessage = "Good luck!";
-  let word = getNewWordLengthBetween(minLength,maxLength);
+  playMessage = "Good luck!"; // starting message
+  let word = getNewWordLengthBetween(minLength,maxLength); // generates this session's word
 
   console.log("req.body.player",req.body.player);
   console.log(typeof req.body.player);
@@ -158,9 +165,10 @@ function startOver(req){
 
   }
 
+// next few lines resets all the other game parameters to their start-of-game values
   req.session.word = word;
   req.session.lives = maxLives;
-  req.session.score = word.length*maxLives;
+  req.session.score = word.length*maxLives; // score starts at max and counts down as you use up lives
   req.session.guesses = [];
   req.session.wordArray = [...word];
   req.session.visibleWord = [];
@@ -169,6 +177,7 @@ function startOver(req){
   }
 }
 
+// give up early
 app.post('/resign',function(req,res){
   req.session.score = 0;
   req.session.won = false;
@@ -221,11 +230,13 @@ app.get('/', function (req, res) {
   }
 })
 
+// if player goes to a nonsense URL, bring them back to game
 app.get('/:dynamic', function (req, res) {
   playMessage = "";
   res.redirect("/");
 })
 
+//
 app.post('/new', function(req,res) {
   startOver(req);
   res.redirect('/');
@@ -240,39 +251,43 @@ app.post('/logout', function(req,res) {
   res.redirect('/');
 })
 
+// not implemented yet, placeholder
 app.post('/highscoretable', function(req,res) {
   res.render('highscoretable',{playerData:req.session,playMessage:playMessage})
 })
 
+// not implemented yet, placeholder
 app.post('/playerhistory', function(req,res) {
   res.render('playerhistory',{playerData:req.session,playMessage:playMessage})
 })
 
-
+// Error handling for multiple guesses of the same letter
 function isAlreadyGuessed(req){
-  for (i=0;i<req.session.guesses.length;i++){
+  for (i=0;i<req.session.guesses.length;i++){ // checks the already-guessed letters
 
-    if (req.body.letter == req.session.guesses[i]){
+    if (req.body.letter == req.session.guesses[i]){ // "true" if new letter is already guessed, but wrong
       return true;
     }
   }
 
-  for (i=0;i<req.session.visibleWord.length;i++){
+  for (i=0;i<req.session.visibleWord.length;i++){ // "true" if new letter is already guessed, and in word
 
     if (req.body.letter == req.session.visibleWord[i]){
       return true;
     }
   }
 
+  // otherwise, it's a new letter, and returns "false"
   return false;
 }
 
+// checks to see if letter is in word
 function isLetterCorrect(req){
-  let found = false;
-  for (i=0;i<req.session.wordArray.length;i++){
+  let found = false; // assumes it's not in the word
+  for (i=0;i<req.session.wordArray.length;i++){  // cycles through the word
     if (req.session.wordArray[i] == req.body.letter){
-      found = true;
-      req.session.visibleWord[i] = req.session.wordArray[i];
+      found = true; // if it ever finds that the letter IS in the word, it sets that the letter IS in the word
+      req.session.visibleWord[i] = req.session.wordArray[i]; // also, it changes the current displayed letter from "-" to its identity
     }
   }
   return found;
@@ -284,11 +299,11 @@ app.post('/guess',function(req,res){
     playMessage = "You already guessed that";
   }
 
-  else if (isLetterCorrect(req)) {
+  else if (isLetterCorrect(req)) {  // isLetterCorrect() returns true/false, but it also updates the displayed letter. Its return value is being used as a conditional to change the playMessage here, but the body of that method also performs the act of updating the displayed word.
     playMessage = "Nice!";
-    //turn over the correct letters
   }
 
+  // if it is not alreadyGuessed, and not correct, then it deducts a life and adds the wrong letter to the guessed list.
   else {
     req.session.guesses.push(req.body.letter);
     req.session.lives -= 1;
@@ -308,15 +323,9 @@ app.listen(port, function () {
 })
 
 
-
-
-
-
-
-
 /////
 
-
+// Completely unnecessary, but I was curious what the longest words in the dictionary were.
 function findTheLongestWord(){
   let longestWordsThusFar = ["a"];
   for (i=0;i<words.length;i++){
@@ -333,6 +342,7 @@ function findTheLongestWord(){
   return longestWordsThusFar;
 }
 
+// You can go navigate to /longestword if you're curious!
 app.get('/longestword',function(req,res){
   let longestWords = findTheLongestWord();
   res.send(longestWords);
