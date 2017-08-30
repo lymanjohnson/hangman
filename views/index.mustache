@@ -24,7 +24,8 @@
          <li>Score:{{playerData.score}}</li>
        </ul>
      </header>
-<!-- <p class="caps">(Debug) Word:{{#playerData.wordArray}}  {{.}}  {{/playerData.wordArray}}</p> -->
+     <span><p>Debug: Select All (cmd-a) To Reveal Word:</p>
+<p class="caps hideme">{{#playerData.wordArray}}  {{.}}  {{/playerData.wordArray}}</p></span>
     <div id="playMessage">{{playMessage}}</div>
 
 <div id = "playArea">
@@ -47,6 +48,7 @@
   </div>
 
     {{#playerData.word}}
+    <p>Use your keyboard, or click a letter below</p>
     <form action="/guess" method="post">
     <ul id="topRow" class="rowOfButtons">
       <li><button type="submit" name="letter" value="q">q</button></li>
