@@ -16,6 +16,7 @@
     "express-validator": "^3.2.1",
     "mongodb": "^2.2.31",
     "mustache": "^2.3.0",
-    "mustache-express": "^1.2.5"
+    "mustache-express": "^1.2.5",
+    "nodemon": "^1.11.0"
   }
 }
