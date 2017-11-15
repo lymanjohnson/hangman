@@ -8,11 +8,15 @@
     "start": "node app.js",
     "web": "node app.js"
   },
+  "engines": {
+    "node": "8.9.1",
+    "npm": "5.5.1"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "express": "^4.15.4",
+    "express": "4.16.2",
     "express-session": "^1.15.5",
     "express-validator": "^3.2.1",
     "mongodb": "^2.2.31",
