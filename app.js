@@ -9,7 +9,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const fs = require('fs');
-const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+const words = fs.readFileSync("./words", "utf-8").toLowerCase().split("\n");
 let dataFile;
 
 
